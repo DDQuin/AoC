@@ -3,31 +3,31 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 )
 
-func day1() {
-	lines, err := readLines("resources/day1input.txt")
+func Day1() {
+	lines, err := ReadLines("resources/day1input.txt")
 	if err != nil {
 		log.Fatalf("readLines: %s", err)
 	}
+	var totalCalElf []int
 	var total int = 0
-	var max int = 0
-	// print file contents
+
 	for _, line := range lines {
 		if line == "" {
-			if total > max {
-				max = total
-			}
+			totalCalElf = append(totalCalElf, total)
 			total = 0
 		} else {
 			calorie, err := strconv.Atoi(line)
 			if err != nil {
-				log.Fatalf("readLines: %s", err)
+				log.Fatalf("converting to %s int: %s", line, err)
 			}
 			total += calorie
 		}
 	}
-	fmt.Println("Max cal is ", max)
+	sort.Sort(sort.Reverse(sort.IntSlice(totalCalElf)))
+	fmt.Println("top 3 sum is ", totalCalElf[0]+totalCalElf[1]+totalCalElf[2])
 
 }
