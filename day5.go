@@ -42,19 +42,14 @@ func Day5() {
 			var stackToChange []string = stacks[stackFrom-1][0:amount]
 			var end int = len(stacks[stackFrom-1])
 			stacks[stackFrom-1] = stacks[stackFrom-1][amount:end]
-			var newStack []string
-			// for i := len(stackToChange) - 1; i >= 0; i-- {
-			// 	newStack = append(newStack, stackToChange[i])
-			// } use this instead of below function for part1
+			newStackTo := make([]string, len(stackToChange))
 
-			for _, crate := range stackToChange {
-				newStack = append(newStack, crate)
+			copy(newStackTo, stackToChange)
+			for i, j := 0, len(newStackTo)-1; i < j; i, j = i+1, j-1 {
+				newStackTo[i], newStackTo[j] = newStackTo[j], newStackTo[i]
 			}
-
-			for _, crate := range stacks[stackTo-1] {
-				newStack = append(newStack, crate)
-			}
-			stacks[stackTo-1] = newStack
+			newStackTo = append(newStackTo, stacks[stackTo-1]...)
+			stacks[stackTo-1] = newStackTo
 		}
 
 	}
