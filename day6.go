@@ -14,15 +14,25 @@ func Day6() {
 	var signal []string
 	var lastMarker int = -1
 	var signalLine string = lines[0]
+	var markLength int = 14
 
-	for j := range signalLine {
-		var currentChar string = signalLine[j : j+1]
-		if contains(signal, currentChar) {
-			signal = nil
+	for j := 0; j < len(signalLine)-markLength-1; j++ {
+
+		for i := range signalLine[j : j+markLength] {
+
+			var currentChar string = signalLine[j+i : j+i+1]
+			if contains(signal, currentChar) {
+				signal = nil
+				break
+			}
+			signal = append(signal, currentChar)
+
+			if len(signal) == markLength {
+				lastMarker = j + i + 1
+				break
+			}
 		}
-		signal = append(signal, currentChar)
-		if len(signal) == 4 {
-			lastMarker = j + 1
+		if lastMarker != -1 {
 			break
 		}
 	}
