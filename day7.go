@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"strconv"
+	"strings"
 )
 
 type FileNode struct {
@@ -21,8 +24,26 @@ func addFile(name string, isDirectory bool, size int, parent *FileNode) *FileNod
 		parent: parent,
 		files: make([]*FileNode, 0),
 	}
-	parent.files = append(parent.files, &newFile)
+	if parent != nil {
+		parent.files = append(parent.files, &newFile)
+	}
 	return &newFile
+}
+
+
+func getOrAddFile(name string, isDirectory bool, size int, parent *FileNode) *FileNode {
+	if parent == nil {
+
+		return addFile(name, isDirectory, size, parent)
+	}
+	for _, child := range parent.files {
+		if child.name == name {
+		
+			return child
+		}
+	}
+
+	return addFile(name, isDirectory, size, parent)
 }
 
 func getFullPath(file *FileNode) string {
@@ -40,7 +61,6 @@ func getFullPath(file *FileNode) string {
 }
 
 func preOrderWalk(file *FileNode) {
-
 	
 	fmt.Println("Name: ", file.name, " Size: ", file.size, " isDirectory: ", file.isDirectory, "Full path: ", getFullPath(file))
 	if len(file.files) == 0 {
@@ -50,6 +70,25 @@ func preOrderWalk(file *FileNode) {
 	for _, child := range file.files {
 		preOrderWalk(child)
 	}
+}
+
+func directorySize(file *FileNode, dirs map[string]int) int {
+	if len(file.files) == 0 {
+		return file.size
+	}
+
+	var sum int = 0
+	for _, child := range file.files {
+		sum += directorySize(child, dirs)
+	}
+	if file.isDirectory {
+		if sum <= 100_000 {
+			dirs[getFullPath(file)] = sum
+			fmt.Println("Directorty ", file.name, " Size: ", sum)
+		}
+		
+	}
+	return sum
 }
 
 func createTestTree() {
@@ -83,15 +122,54 @@ func createTestTree() {
 	preOrderWalk(&root)
 }
 
+
 func Day7() {
-	// lines, err := ReadLines("resources/day7test.txt")
-	// if err != nil {
-	// 	log.Fatalf("readLines: %s", err)
-	// }
-	
-	createTestTree()
-	// for _, line := range lines {
-	// 	fmt.Println(line)
-	// }
+	lines, err := ReadLines("resources/day7input.txt")
+	if err != nil {
+		log.Fatalf("readLines: %s", err)
+	}
+
+	var currentFile *FileNode = nil
+	var root *FileNode = nil
+	for _, line := range lines {
+		tokens := strings.Split(line, " ")
+
+		if tokens[0] == "$" {
+			if tokens[1] == "cd" {
+				if tokens[2] == ".." {
+					currentFile = currentFile.parent
+				} else {
+					f := getOrAddFile(tokens[2], true, 0, currentFile)
+					if f.name == "/" {
+						root = f
+					}
+					currentFile = f
+				}
+			} else if tokens[1] == "ls" {
+
+			}
+		} else {
+			if tokens[0] == "dir" {
+				addFile(tokens[1], true, 0, currentFile)
+			} else {
+				size, err := strconv.Atoi(tokens[0])
+				if err != nil {
+					log.Fatalf("converting string to num: %s", err)
+				}
+				addFile(tokens[1], false, size, currentFile)
+			}
+		}
+	}
+
+	dirMap := make(map[string]int)
+	directorySize(root, dirMap)
+
+	var sum int = 0
+	for _, val := range dirMap {
+		sum += val
+	}
+	fmt.Println(sum)
+
+
 
 }
