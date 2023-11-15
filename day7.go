@@ -8,28 +8,26 @@ import (
 )
 
 type FileNode struct {
-	name string
+	name        string
 	isDirectory bool
-	size int
-	parent *FileNode
-	files []*FileNode
-
+	size        int
+	parent      *FileNode
+	files       []*FileNode
 }
 
 func addFile(name string, isDirectory bool, size int, parent *FileNode) *FileNode {
 	newFile := FileNode{
-		name: name,
+		name:        name,
 		isDirectory: isDirectory,
-		size: size,
-		parent: parent,
-		files: make([]*FileNode, 0),
+		size:        size,
+		parent:      parent,
+		files:       make([]*FileNode, 0),
 	}
 	if parent != nil {
 		parent.files = append(parent.files, &newFile)
 	}
 	return &newFile
 }
-
 
 func getOrAddFile(name string, isDirectory bool, size int, parent *FileNode) *FileNode {
 	if parent == nil {
@@ -38,7 +36,7 @@ func getOrAddFile(name string, isDirectory bool, size int, parent *FileNode) *Fi
 	}
 	for _, child := range parent.files {
 		if child.name == name {
-		
+
 			return child
 		}
 	}
@@ -56,12 +54,12 @@ func getFullPath(file *FileNode) string {
 		} else {
 			fullPath = curFile.name + "/" + fullPath
 		}
-	} 
+	}
 	return fullPath
 }
 
 func preOrderWalk(file *FileNode) {
-	
+
 	fmt.Println("Name: ", file.name, " Size: ", file.size, " isDirectory: ", file.isDirectory, "Full path: ", getFullPath(file))
 	if len(file.files) == 0 {
 		return
@@ -82,22 +80,21 @@ func directorySize(file *FileNode, dirs map[string]int) int {
 		sum += directorySize(child, dirs)
 	}
 	if file.isDirectory {
-		if sum <= 100_000 {
-			dirs[getFullPath(file)] = sum
-			fmt.Println("Directorty ", file.name, " Size: ", sum)
-		}
-		
+
+		dirs[getFullPath(file)] = sum
+		fmt.Println("Directorty ", file.name, " Size: ", sum)
+
 	}
 	return sum
 }
 
 func createTestTree() {
 	root := FileNode{
-		name: "/",
+		name:        "/",
 		isDirectory: true,
-		size: -1,
-		parent: nil,
-		files: make([]*FileNode, 0),
+		size:        -1,
+		parent:      nil,
+		files:       make([]*FileNode, 0),
 	}
 	a := addFile("a", true, -1, &root)
 	addFile("b.txt", false, 14848514, &root)
@@ -109,19 +106,15 @@ func createTestTree() {
 	addFile("d.ext", false, 5626152, d)
 	addFile("k", false, 7214296, d)
 
-
 	addFile("f", false, 29116, a)
 	addFile("g", false, 2557, a)
 	addFile("h.lst", false, 62596, a)
 	e := addFile("e", true, -1, a)
 
 	addFile("i", false, 584, e)
-	
-
 
 	preOrderWalk(&root)
 }
-
 
 func Day7() {
 	lines, err := ReadLines("resources/day7input.txt")
@@ -162,14 +155,30 @@ func Day7() {
 	}
 
 	dirMap := make(map[string]int)
-	directorySize(root, dirMap)
+	var usedSpace int = directorySize(root, dirMap)
 
 	var sum int = 0
 	for _, val := range dirMap {
-		sum += val
+		if val <= 100_000 {
+			sum += val
+		}
 	}
 	fmt.Println(sum)
 
+	var totalSpace int = 70000000
+	var spaceNeeded int = 30000000
 
+	var unusedSpace int = totalSpace - usedSpace
+
+	fmt.Println(unusedSpace)
+
+	var smallestDictSize int = totalSpace
+	for _, val := range dirMap {
+		if val+unusedSpace > spaceNeeded && val < smallestDictSize {
+			smallestDictSize = val
+		}
+	}
+
+	fmt.Println(smallestDictSize)
 
 }
