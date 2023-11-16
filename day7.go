@@ -163,14 +163,12 @@ func Day7() {
 			sum += val
 		}
 	}
-	fmt.Println(sum)
+	fmt.Println("Total sum of directories less than or equal to 100,000 is ", sum)
 
 	var totalSpace int = 70000000
 	var spaceNeeded int = 30000000
 
 	var unusedSpace int = totalSpace - usedSpace
-
-	fmt.Println(unusedSpace)
 
 	var smallestDictSize int = totalSpace
 	for _, val := range dirMap {
@@ -179,6 +177,6 @@ func Day7() {
 		}
 	}
 
-	fmt.Println(smallestDictSize)
+	fmt.Println("Smallest directory size to delete for enough space is", smallestDictSize)
 
 }
