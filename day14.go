@@ -76,8 +76,9 @@ func createLine(cave [][]byte, point1 Point, point2 Point) {
 }
 
 func createCave(paths [][]Point, width int, height int) [][]byte {
-	cave := make([][]byte, height)
-	for y := 0; y < height; y++ {
+	// Hieght + 2 and x increased to width + height for part 2
+	cave := make([][]byte, height+2)
+	for y := 0; y < height+2; y++ {
 		cave[y] = make([]byte, width+height)
 		for x := 0; x < width+height; x++ {
 			cave[y][x] = '.'
@@ -93,7 +94,8 @@ func createCave(paths [][]Point, width int, height int) [][]byte {
 		}
 
 	}
-	//createLine(cave, Point{x: 0, y: height - 1}, Point{x: width - 1, y: height - 1})
+	// Added inifnity line for part 2
+	createLine(cave, Point{x: 0, y: height + 1}, Point{x: width + height - 1, y: height + 1})
 	return cave
 }
 
@@ -110,6 +112,9 @@ func simulateCaveSand(cave [][]byte) int {
 		} else {
 			sandUnits++
 			cave[sand.y][sand.x] = 'o'
+			if sand.y == 0 {
+				return sandUnits
+			}
 			sand = Point{500, 0}
 		}
 	}
@@ -117,7 +122,7 @@ func simulateCaveSand(cave [][]byte) int {
 }
 
 func Day14() {
-	lines, err := ReadLines("resources/day14test.txt")
+	lines, err := ReadLines("resources/day14input.txt")
 	if err != nil {
 		log.Fatalf("readLines: %s", err)
 	}
@@ -127,8 +132,8 @@ func Day14() {
 	cave := createCave(paths, maxX+1, maxY+1)
 	printCave(cave, minX)
 
-	//sand := simulateCaveSand(cave)
+	sand := simulateCaveSand(cave)
 
-	//fmt.Println("There are", sand, "units of sand before it flows forever")
+	fmt.Println("There are", sand, "units of sand before it flows forever")
 
 }
