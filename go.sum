@@ -1,0 +1,4 @@
+github.com/RyanCarrier/dijkstra v1.3.0 h1:lqrLMwKy8PtyDpWqZpcbzr9KkqnLJrDdQ9u3iNyNxm8=
+github.com/RyanCarrier/dijkstra v1.3.0/go.mod h1:9egjhC7eVsfREX6NrYS+1wHzk9C/9v2Cz26/bqpjjTc=
+github.com/ernestosuarez/itertools v0.0.0-20190516153236-40a02c159e7b h1:jfqcM/m7Rt6wR6caX7TaRk5tHWCz5HRq+kNCPSNSKTo=
+github.com/ernestosuarez/itertools v0.0.0-20190516153236-40a02c159e7b/go.mod h1:WzH8PFd6m6UcRNbYXLAjgjyvwE5EqBKwTYosDoUDG/Q=
