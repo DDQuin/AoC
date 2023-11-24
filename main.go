@@ -18,5 +18,6 @@ func main() {
 	//Day15()
 	//Day16()
 	//Day17()
-	Day17other()
+	//Day17other()
+	Day18()
 }
