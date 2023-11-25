@@ -1,4 +1,6 @@
 github.com/RyanCarrier/dijkstra v1.3.0 h1:lqrLMwKy8PtyDpWqZpcbzr9KkqnLJrDdQ9u3iNyNxm8=
 github.com/RyanCarrier/dijkstra v1.3.0/go.mod h1:9egjhC7eVsfREX6NrYS+1wHzk9C/9v2Cz26/bqpjjTc=
+github.com/bozdoz/advent-of-code-2022 v0.0.0-20230123003829-81247298dca8 h1:7L8FXeDDoxa81155gAe7m54BYY+fVHw8ndQn/N6xFq0=
+github.com/bozdoz/advent-of-code-2022 v0.0.0-20230123003829-81247298dca8/go.mod h1:44pTwsEH9foxt9r/IeART5HRx5n329+2n37a3nxbnUM=
 github.com/ernestosuarez/itertools v0.0.0-20190516153236-40a02c159e7b h1:jfqcM/m7Rt6wR6caX7TaRk5tHWCz5HRq+kNCPSNSKTo=
 github.com/ernestosuarez/itertools v0.0.0-20190516153236-40a02c159e7b/go.mod h1:WzH8PFd6m6UcRNbYXLAjgjyvwE5EqBKwTYosDoUDG/Q=
