@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -64,5 +65,30 @@ func Day21() {
 	}
 	monkeyMap := createMonkeyMap(lines)
 	endVal := evalMonkey(monkeyMap, "root")
+
+	leftNode := monkeyMap[monkeyMap["root"].left]
+	rightNode := monkeyMap[monkeyMap["root"].right]
+
+	humanVal := monkeyMap["humn"]
+	monkeyMap["humn"] = MonkeyNode{name: humanVal.name, left: humanVal.left, right: humanVal.right, value: 0, operator: humanVal.operator}
+
+	leftVal := evalMonkey(monkeyMap, leftNode.name)
+	rightVal := evalMonkey(monkeyMap, rightNode.name)
+
+	nodeToChange := rightNode
+	nodeCorrect := leftNode
+	if leftVal < rightVal {
+		nodeToChange = leftNode
+		nodeCorrect = rightNode
+	}
+
+	//Binary search insipiration taken from https://github.com/mnml/aoc/blob/main/2022/21/1.go
+	part2, _ := sort.Find(1e16, func(v int) int {
+		monkeyMap["humn"] = MonkeyNode{name: humanVal.name, left: humanVal.left, right: humanVal.right, value: v, operator: humanVal.operator}
+		return evalMonkey(monkeyMap, nodeCorrect.name) - evalMonkey(monkeyMap, nodeToChange.name)
+	})
+
 	fmt.Println("Root yells", endVal)
+
+	fmt.Println("Human val is", part2)
 }
