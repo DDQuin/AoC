@@ -25,5 +25,6 @@ func main() {
 	//Day21()
 	//Day22()
 	//Day22Other()
-	Day23()
+	//Day23()
+	Day24()
 }
