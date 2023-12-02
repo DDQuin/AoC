@@ -73,33 +73,42 @@ func createGames(lines []string) []Game {
 	return games
 }
 
+func isSetPossible(redMax int, greenMax int, blueMax int, sets []Set) bool {
+	for _, set := range sets {
+		if set.red > redMax || set.green > greenMax || set.blue > blueMax {
+			return false
+		}
+	}
+	return true
+}
+
+func getMinSet(sets []Set) Set {
+	firstGameSet := sets[0]
+	minSet := Set{red: firstGameSet.red, green: firstGameSet.green, blue: firstGameSet.blue}
+	for _, set := range sets {
+		if set.red > minSet.red {
+			minSet.red = set.red
+		}
+		if set.green > minSet.green {
+			minSet.green = set.green
+		}
+		if set.blue > minSet.blue {
+			minSet.blue = set.blue
+		}
+
+	}
+	return minSet
+}
+
 func getIDSumAndPower(redMax int, greenMax int, blueMax int, games []Game) (int, int) {
 	total := 0
 	powerTotal := 0
 	minSets := make([]Set, 0)
 	for _, game := range games {
-		isPossible := true
-		firstGameSet := (*game.sets)[0]
-		minSet := Set{red: firstGameSet.red, green: firstGameSet.green, blue: firstGameSet.blue}
-		for _, set := range *game.sets {
-			if set.red > redMax || set.green > greenMax || set.blue > blueMax {
-				isPossible = false
-			}
-			if set.red > minSet.red {
-				minSet.red = set.red
-			}
-			if set.green > minSet.green {
-				minSet.green = set.green
-			}
-			if set.blue > minSet.blue {
-				minSet.blue = set.blue
-			}
-
-		}
-		minSets = append(minSets, minSet)
-		if isPossible {
+		if isSetPossible(redMax, greenMax, blueMax, *game.sets) {
 			total += game.id
 		}
+		minSets = append(minSets, getMinSet(*game.sets))
 	}
 	for _, minSet := range minSets {
 		powerTotal += minSet.blue * minSet.green * minSet.red
