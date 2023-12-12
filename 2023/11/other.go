@@ -1,5 +1,7 @@
 package main
 
+//taken from https://github.com/rumkugel13/AdventOfCode2023/blob/main/day11.go
+
 import (
 	"fmt"
 	"os"
